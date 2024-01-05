@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from openai import OpenAI
 import requests
 app = Flask(__name__)
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
 
 
 @app.route("/")

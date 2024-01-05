@@ -1,12 +1,14 @@
 from flask import Flask, jsonify, request
 from openai import OpenAI
 import requests
+import os
 app = Flask(__name__)
-client = OpenAI(api_key="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")
+app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
+client = OpenAI(api_key=app.config['OPENAI_API_KEY'])
 
 
 @app.route("/")
-def home():
+def main():
     return "ay yo motherfucker"
 
 

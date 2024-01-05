@@ -2,9 +2,18 @@ from flask import Flask, jsonify, request
 from openai import OpenAI
 import requests
 from flask_cors import CORS
+from dotenv import load_dotenv
+import os
+load_dotenv()
 app = Flask(__name__)
 CORS(app)
-client = OpenAI(api_key='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')
+app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
+client = OpenAI(api_key=app.config['OPENAI_API_KEY'])
+
+
+@app.route("/")
+def main():
+    return "ay yo motherfucker"
 
 
 @app.route('/generate_image', methods=['POST'])
@@ -96,7 +105,3 @@ def edit_image():
         return jsonify({"data": generated_image_urls}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-
-if __name__ == '__main__':
-    app.run(debug=True)

@@ -1,14 +1,12 @@
 from flask import Flask, jsonify, request
 from openai import OpenAI
 import requests
-from flask_cors import CORS
 app = Flask(__name__)
-CORS(app)
 client = OpenAI(api_key="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")
 
 
 @app.route("/")
-def main():
+def home():
     return "ay yo motherfucker"
 
 

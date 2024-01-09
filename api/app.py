@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from openai import OpenAI
 import requests
 import base64
+from BingImageCreator import ImageGen
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
@@ -31,6 +32,23 @@ def generate_image():
         )
         image_url = response.data[0].url
         return jsonify({'image_url': image_url}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/bing_gen', methods=['POST'])
+def bing_gen():
+    try:
+        data = request.json
+        prompt = data.get('prompt')
+
+        if not prompt:
+            return jsonify({'error': 'Missing prompt parameter'}), 400
+
+        image_generator = ImageGen(
+            "1xIsn50_bMDtM_Q25t_GRd7QOwMnQC-mwECcq_T4lmo3TSN9tC0zAIq263rd8HhSAkv1hZKJ_WrQmbXV4nS_obvxlgI9uqGo36jjY74iOIfC4enT1i9-F8fFcKGpzV3-agBQptqFx3k0QnBnTwwyUITj4_PSfsqSpV_1rBqvIe9FY80s2IXV4PUkxjrFbSYN_4EC7Dvpx-2x17ofnozUb0w", "")
+        imgs = image_generator.get_images(prompt)
+        return jsonify({'images': imgs}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

@@ -1,15 +1,16 @@
 from flask import Flask, jsonify, request
 from openai import OpenAI
 import requests
-import os
+import base64
+# from flask_cors import CORS
 app = Flask(__name__)
-app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
-client = OpenAI(api_key=app.config['OPENAI_API_KEY'])
+# CORS(app)
+client = OpenAI(api_key="")
 
 
 @app.route("/")
 def main():
-    return "ay yo motherfucker"
+    return "ay yo"
 
 
 @app.route('/generate_image', methods=['POST'])
@@ -30,6 +31,106 @@ def generate_image():
         )
         image_url = response.data[0].url
         return jsonify({'image_url': image_url}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/generate_imagine', methods=['POST'])
+def generate_imagine():
+    try:
+        data = request.json
+        prompt = data.get('prompt')
+        style_id = data.get('style_id')
+        if not prompt or not style_id:
+            return jsonify({'error': 'Missing parameter'}), 400
+
+        url = 'https://api.vyro.ai/v1/imagine/api/generations'
+
+        headers = {
+            'Authorization': 'Bearer vk-3OwHbdqCSGISorOpEf0nD4N0oq80oO1fgcZZlpi3nnc58'
+        }
+
+        # Using None here allows us to treat the parameters as string
+        payload = {
+            'prompt': (None, prompt),
+            'style_id': (None, style_id)
+        }
+        response = requests.post(url, headers=headers, files=payload)
+        image_base64 = base64.b64encode(response.content).decode('utf-8')
+        return jsonify({'image_base64': image_base64}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/img_gen', methods=['POST'])
+def img_gen():
+    try:
+        data = request.json
+        prompt = data.get('prompt')
+        model = data.get('model')
+        if not prompt:
+            return jsonify({'error': 'Missing parameter'}), 400
+        urls = [
+            "https://api-inference.huggingface.co/models/openskyml/dalle-3-xl",
+            "https://api-inference.huggingface.co/models/dataautogpt3/OpenDalleV1.1",
+        ]
+        headers = {
+            "Authorization": "Bearer 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"}
+
+        def query(payload):
+            res = requests.post(urls[model], headers=headers, json=payload)
+            return res.content
+        image_bytes = query({
+            "inputs": prompt
+        })
+        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+        return jsonify({'image_base64': image_base64}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/rm_bg', methods=['POST'])
+def rm_bg():
+    try:
+        data = request.json
+        url = data.get('url')
+
+        if not url:
+            return jsonify({'error': 'Missing url parameter'}), 400
+        response = requests.get(url)
+        r = requests.post('https://clipdrop-api.co/remove-background/v1',
+                          files={
+                              'image_file':  response.content,
+                          },
+                          headers={
+                              'x-api-key': 'af6537c64a511dcc5090e9c192e391f1b46eba0212e7705f52d4bc3f5d35e32546735c16703d982b4daff96f23507e7e'}
+                          )
+        image_base64 = base64.b64encode(r.content).decode('utf-8')
+        return jsonify({'image_base64': image_base64}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/imagine_upscale', methods=['POST'])
+def imagine_upscale():
+    try:
+        data = request.json
+        url = data.get('url')
+
+        if not url:
+            return jsonify({'error': 'Missing url parameter'}), 400
+        response = requests.get(url)
+        url = 'https://api.vyro.ai/v1/imagine/api/upscale'
+        payload = {
+            'image': ('filename.png', response.content, 'image/png')
+        }
+        headers = {
+            'Authorization': 'Bearer vk-3OwHbdqCSGISorOpEf0nD4N0oq80oO1fgcZZlpi3nnc58'
+        }
+
+        response = requests.post(url, headers=headers, files=payload)
+        image_base64 = base64.b64encode(response.content).decode('utf-8')
+        return jsonify({'image_base64': image_base64}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -101,3 +202,7 @@ def edit_image():
         return jsonify({"data": generated_image_urls}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+# if __name__ == '__main__':
+#     app.run(debug=True)

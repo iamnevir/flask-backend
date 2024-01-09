@@ -1,3 +1,3 @@
-from api import index
+from api.index import create_app
 
-app = index
+app = create_app()

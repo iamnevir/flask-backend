@@ -2,9 +2,10 @@ from flask import Flask, jsonify, request
 from openai import OpenAI
 import requests
 import base64
-# from flask_cors import CORS
+from flask_cors import CORS
 app = Flask(__name__)
-# CORS(app)
+CORS(app, resources={
+     r"/*": {"origins": ["https://heartsteal.onrender.com", "https://heartsteal.vercel.app"]}})
 client = OpenAI(api_key="")
 
 

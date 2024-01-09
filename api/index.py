@@ -6,6 +6,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={
      r"/*": {"origins": ["https://heartsteal.onrender.com", "https://heartsteal.vercel.app"]}})
+# CORS(app)
 client = OpenAI(api_key="")
 
 
@@ -74,6 +75,10 @@ def img_gen():
         urls = [
             "https://api-inference.huggingface.co/models/openskyml/dalle-3-xl",
             "https://api-inference.huggingface.co/models/dataautogpt3/OpenDalleV1.1",
+            "https://api-inference.huggingface.co/models/Norod78/SDXL-YarnArtStyle-LoRA",
+            "https://api-inference.huggingface.co/models/segmind/SSD-1B",
+            "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+            "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1",
         ]
         headers = {
             "Authorization": "Bearer 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"}

@@ -4,9 +4,7 @@ import requests
 import base64
 from flask_cors import CORS
 app = Flask(__name__)
-CORS(app, resources={
-     r"/*": {"origins": ["https://heartsteal.onrender.com", "https://heartsteal.vercel.app"]}})
-# CORS(app)
+CORS(app)
 client = OpenAI(api_key="")
 
 

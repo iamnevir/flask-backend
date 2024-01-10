@@ -59,6 +59,7 @@ def generate_imagine():
         data = request.json
         prompt = data.get('prompt')
         style_id = data.get('style_id')
+        negative_prompt = data.get('negative_prompt')
         if not prompt or not style_id:
             return jsonify({'error': 'Missing parameter'}), 400
 
@@ -71,7 +72,8 @@ def generate_imagine():
         # Using None here allows us to treat the parameters as string
         payload = {
             'prompt': (None, prompt),
-            'style_id': (None, style_id)
+            'style_id': (None, style_id),
+            'negative_prompt': (None, negative_prompt)
         }
         response = requests.post(url, headers=headers, files=payload)
         image_base64 = base64.b64encode(response.content).decode('utf-8')

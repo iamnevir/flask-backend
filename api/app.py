@@ -46,7 +46,7 @@ def bing_gen():
             return jsonify({'error': 'Missing prompt parameter'}), 400
 
         image_generator = ImageGen(
-            "1976vdIQ2CRjdlwmMaG5kvjxr8YPNe_3J6wHrKSD4jRsHgeVLsDkpt1iQzr0dJCJHAwPwbaLZ8xvwXEnSsKFWtfjBKpK5N1XX9TxEhkCikBr8c8IejbdO6FLDw8EXfhcly0zmfvvRBG6DljcLricMfUPdvx7p-ecE0kHX8ZUVC_zvOwLuXZVTVDjhGHQX3tu1PbEigYJQuuOfMMkHMpuGNQ", "")
+            "1OM-hdpkbvySzbwXS6aD1N2n7WbUhp_y2wpwPDNUyViQB2VIRHNqsycXXdFTWXY2bEkHmh8Y8PySVj06cDOObi_BGR7SaCNAa_-wIom58v17U4WP9eY6P3NuQQwDQ0YETZBODKK8gCdHXsfySddgV5l86N-DG2bsLPifmjfKuoPiZPD9u7KIJK27Eq7YLuquRY7xco-roj8_B01c9aCy-8w", "")
         imgs = image_generator.get_images(prompt)
         return jsonify({'images': imgs}), 200
     except Exception as e:

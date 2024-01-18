@@ -113,6 +113,30 @@ def img_gen():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/animagine', methods=['POST'])
+def animagine():
+    try:
+        data = request.json
+        prompt = data.get('prompt')
+        if not prompt:
+            return jsonify({'error': 'Missing parameter'}), 400
+        url = "https://api-inference.huggingface.co/models/cagliostrolab/animagine-xl-3.0"
+
+        headers = {
+            "Authorization": "Bearer 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"}
+
+        def query(payload):
+            res = requests.post(url=url, headers=headers, json=payload)
+            return res.content
+        image_bytes = query({
+            "inputs": prompt
+        })
+        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+        return jsonify({'image_base64': image_base64}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/rm_bg', methods=['POST'])
 def rm_bg():
     try:

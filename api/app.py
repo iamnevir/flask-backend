@@ -18,24 +18,24 @@ def main():
 
 @app.route("/generate_image", methods=["POST"])
 def generate_image():
-#     try:
-#         data = request.json
-#         prompt = data.get("prompt")
+    try:
+        data = request.json
+        prompt = data.get("prompt")
 
-#         if not prompt:
-#             return jsonify({"error": "Missing prompt parameter"}), 400
+        if not prompt:
+            return jsonify({"error": "Missing prompt parameter"}), 400
 
-#         response = client.images.generate(
-#             model="dall-e-2",
-#             prompt=prompt,
-#             size="1024x1024",
-#             quality="standard",
-#             n=1,
-#         )
-#         image_url = response.data[0].url
-#         return jsonify({"image_url": image_url}), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+        response = client.images.generate(
+            model="dall-e-2",
+            prompt=prompt,
+            size="1024x1024",
+            quality="standard",
+            n=1,
+        )
+        image_url = response.data[0].url
+        return jsonify({"image_url": image_url}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/bing_gen", methods=["POST"])
@@ -255,5 +255,5 @@ def edit_image():
         return jsonify({"error": str(e)}), 500
 
 
-# if __name__ == "__main__":
-#     app.run(host="0.0.0.0")
+if __name__ == "__main__":
+    app.run(host="0.0.0.0")

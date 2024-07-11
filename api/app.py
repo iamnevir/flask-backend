@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 
-# from openai import OpenAI
+from openai import OpenAI
 import requests
 import base64
 from BingImageCreator import ImageGen
